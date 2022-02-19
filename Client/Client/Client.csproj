@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">anycpu</Platform>
+    <ProjectGuid>{D8B3A3F4-52F9-4FA6-8C77-B90BCF650E18}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Client</RootNamespace>
+    <AssemblyName>Client</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|anycpu' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|anycpu' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GamePlay\Frame\FrameDownLoadManager.cs" />
+    <Compile Include="GamePlay\Frame\FrameInputData.cs" />
+    <Compile Include="GamePlay\Frame\FrameUploadManager.cs" />
+    <Compile Include="GamePlay\GameNet\NetManager.cs" />
+    <Compile Include="GamePlay\GameNet\PacketBundle.cs" />
+    <Compile Include="GamePlay\GamePlay.cs" />
+    <Compile Include="GamePlay\Logic\FrameAPI.cs" />
+    <Compile Include="GamePlay\Logic\GameLogic.cs" />
+    <Compile Include="GamePlay\Logic\GameLogicActor.cs" />
+    <Compile Include="GamePlay\View\CommondAPI.cs" />
+    <Compile Include="GamePlay\View\Commond\CommondData.cs" />
+    <Compile Include="GamePlay\View\Commond\CommondDataManager.cs" />
+    <Compile Include="GamePlay\View\GameView.cs" />
+    <Compile Include="GamePlay\View\GameViewActor.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Debug.cs" />
+    <Compile Include="NetCore\KCP\ASynKcpUdpServerSocket.cs" />
+    <Compile Include="NetCore\KCP\ASynServerKcp.cs" />
+    <Compile Include="NetCore\KCP\ASynKcpUdpClientSocket.cs" />
+    <Compile Include="NetCore\KCP\KCP.cs" />
+    <Compile Include="GamePlayData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NetCore\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

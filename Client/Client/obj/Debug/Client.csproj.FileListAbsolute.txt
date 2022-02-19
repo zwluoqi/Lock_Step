@@ -1,0 +1,6 @@
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/Client.exe
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/Client.pdb
+/Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.csprojAssemblyReference.cache
+/Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.csproj.CoreCompileInputs.cache
+/Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.exe
+/Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.pdb

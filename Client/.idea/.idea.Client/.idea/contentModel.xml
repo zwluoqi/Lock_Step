@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/JetBrains/Rider2020.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/JetBrains/Rider2020.2/resharper-host/local/Transient/Rider/v202/SolutionCaches/_Client.1191881410.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="Client" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Client.csproj" t="IncludeRecursive" />
+        <e p="Debug.cs" t="Include" />
+        <e p="GamePlay" t="Include">
+          <e p="Frame" t="Include">
+            <e p="FrameDownLoadManager.cs" t="Include" />
+            <e p="FrameInputData.cs" t="Include" />
+            <e p="FrameUploadManager.cs" t="Include" />
+          </e>
+          <e p="GameNet" t="Include">
+            <e p="NetManager.cs" t="Include" />
+            <e p="PacketBundle.cs" t="Include" />
+          </e>
+          <e p="GamePlay.cs" t="Include" />
+          <e p="Logic" t="Include">
+            <e p="FrameAPI.cs" t="Include" />
+            <e p="GameLogic.cs" t="Include" />
+            <e p="GameLogicActor.cs" t="Include" />
+          </e>
+          <e p="View" t="Include">
+            <e p="Commond" t="Include">
+              <e p="CommondData.cs" t="Include" />
+              <e p="CommondDataManager.cs" t="Include" />
+            </e>
+            <e p="CommondAPI.cs" t="Include" />
+            <e p="GameView.cs" t="Include" />
+            <e p="GameViewActor.cs" t="Include" />
+          </e>
+        </e>
+        <e p="GamePlayData.cs" t="Include" />
+        <e p="NetCore" t="Include">
+          <e p="KCP" t="Include">
+            <e p="ASynKcpUdpClientSocket.cs" t="Include" />
+            <e p="ASynKcpUdpServerSocket.cs" t="Include" />
+            <e p="ASynServerKcp.cs" t="Include" />
+            <e p="KCP.cs" t="Include" />
+          </e>
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Client.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

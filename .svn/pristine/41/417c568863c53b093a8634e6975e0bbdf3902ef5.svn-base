@@ -1,0 +1,94 @@
+﻿// /*
+//                #########
+//               ############
+//               #############
+//              ##  ###########
+//             ###  ###### #####
+//             ### #######   ####
+//            ###  ########## ####
+//           ####  ########### ####
+//          ####   ###########  #####
+//         #####   ### ########   #####
+//        #####   ###   ########   ######
+//       ######   ###  ###########   ######
+//      ######   #### ##############  ######
+//     #######  #####################  ######
+//     #######  ######################  ######
+//    #######  ###### #################  ######
+//    #######  ###### ###### #########   ######
+//    #######    ##  ######   ######     ######
+//    #######        ######    #####     #####
+//     ######        #####     #####     ####
+//      #####        ####      #####     ###
+//       #####       ###        ###      #
+//         ###       ###        ###
+//          ##       ###        ###
+// __________#_______####_______####______________
+//
+//                 我们的未来没有BUG
+// * ==============================================================================
+// * Filename:NetManager.cs
+// * Created:2022/2/16
+// * Author:  zhouwei
+// * Purpose:
+// * ==============================================================================
+// */
+//
+using System;
+namespace Client.NetManager
+{
+
+	public class NetConfig
+	{
+        public static string ServerAddress = "10.10.11.81";
+        //public static int PlayerId = 1; // 玩家id，也是本客户端KCP会话id
+        public static readonly int Port = 8001;
+    }
+	public class NetManager
+	{
+
+
+        private ASynKcpUdpClientSocket _socket = null;
+
+        public void Init(int PlayerId)
+        {
+            _socket = new ASynKcpUdpClientSocket(PlayerId, NetConfig.ServerAddress, NetConfig.Port, RecHandler);
+        }
+
+		
+        private void RecHandler(byte[] buf)
+        {
+            //json TODO
+
+        }
+
+        public void Update()
+        {
+            _socket.Update();
+        }
+
+        public void Release()
+        {
+            _socket.Dispose();
+            _socket = null;
+        }
+
+        public void SendMsg(string json)
+        {
+            int msgId = 0;
+
+            byte[] playerIdBytes = BitConverter.GetBytes(NetConfig.PlayerId);
+            byte[] msgIdBytes = BitConverter.GetBytes((int)msgId);
+            byte[] msgBytes = System.Text.Encoding.UTF8.GetBytes(json);
+            int bufferSize = playerIdBytes.Length + msgIdBytes.Length + msgBytes.Length;
+            byte[] sendBuf = new byte[bufferSize];
+            int offset = 0;
+            Array.Copy(playerIdBytes, 0, sendBuf, offset, playerIdBytes.Length);
+            offset += playerIdBytes.Length;
+            Array.Copy(msgIdBytes, 0, sendBuf, offset, msgIdBytes.Length);
+            offset += msgIdBytes.Length;
+            Array.Copy(msgBytes, 0, sendBuf, offset, msgBytes.Length);
+            _socket.Send(sendBuf);
+        }
+    }
+}
