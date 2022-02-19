@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using log4net;
 
 public class ASynKcpUdpServerSocket
 {
@@ -76,7 +77,7 @@ public class ASynKcpUdpServerSocket
     {
         byte[] rcvBuf = _socket.EndReceive(arg, ref _remoteEP);
         string epKey = _remoteEP.Address + ":" + _remoteEP.Port;
-        //Log4U.LogDebug("ASynKcpUdpServerSocket:ReceiveAsyn Message receive from ", epKey);
+        LogManager.GetLogger("kcp_server").Debug("ASynKcpUdpServerSocket:ReceiveAsyn Message receive from "+ epKey);
 
         ASynServerKcp aSynKcp;
         if (_aSynKcpDic.ContainsKey(epKey))
@@ -85,7 +86,10 @@ public class ASynKcpUdpServerSocket
         }
         else
         {
-            aSynKcp = new ASynServerKcp((uint)(_aSynKcpDic.Count + 1), _socket, _remoteEP, _recHandler);
+            //这个ID应该通过tcp分配给Client,然后服务器创建对应的ASynServerKcp而不是在这个地方处理,这里简化
+            UInt32 conv_ =0;
+            KCP.ikcp_decode32u(rcvBuf, 0, ref conv_);
+            aSynKcp = new ASynServerKcp(conv_, _socket, _remoteEP, _recHandler);
             _aSynKcpDic.Add(epKey, aSynKcp);
         }
         aSynKcp.Input(rcvBuf);

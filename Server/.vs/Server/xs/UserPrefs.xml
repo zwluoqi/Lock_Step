@@ -1,15 +1,33 @@
 ﻿<Properties StartupConfiguration="{B76F4629-EF01-4D82-ACF3-E5840C5A3311}|Default">
-  <MonoDevelop.Ide.ItemProperties.Server FirstBuild="True" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Server/Program.cs">
+  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Server/ServerRunning/Frame/FrameSyncManager.cs">
     <Files>
-      <File FileName="Server/Program.cs" Line="1" Column="1" />
+      <File FileName="Server/ServerRunning/ServerNet/PacketBundle.cs" Line="1" Column="1" />
+      <File FileName="Server/ServerRunning/ServerNet/ServerUDPMgr.cs" Line="34" Column="1" />
+      <File FileName="Server/NetCore/Kcp/ASynKcpUdpServerSocket.cs" Line="92" Column="1" />
+      <File FileName="Server/NetCore/Kcp/ASynServerKcp.cs" Line="44" Column="1" />
+      <File FileName="Server/ServerRunning/Frame/FrameManager.cs" Line="73" Column="30" />
+      <File FileName="Server/ServerRunning/GamePlay.cs" Line="60" Column="21" />
+      <File FileName="Server/NetCore/Kcp/KCP.cs" Line="481" Column="1" />
+      <File FileName="Server/ServerRunning/Frame/FrameSyncManager.cs" Line="60" Column="1" />
+      <File FileName="Server/ServerRunning/Frame/FrameInputData.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Server" expanded="True">
             <Node name="Server" expanded="True">
-              <Node name="Program.cs" selected="True" />
+              <Node name="References" expanded="True" />
+              <Node name="NetCore" expanded="True">
+                <Node name="Kcp" expanded="True" />
+              </Node>
+              <Node name="Properties" expanded="True" />
+              <Node name="ServerRunning" expanded="True">
+                <Node name="Frame" expanded="True">
+                  <Node name="FrameSyncManager.cs" selected="True" />
+                </Node>
+                <Node name="ServerNet" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>

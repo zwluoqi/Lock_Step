@@ -36,6 +36,8 @@
 //
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using log4net;
 using Newtonsoft.Json.Linq;
 
 namespace Client.Net
@@ -51,6 +53,7 @@ namespace Client.Net
         {
             NetConfig.PlayerId = PlayerId;
             _socket = new ASynKcpUdpClientSocket(NetConfig.PlayerId, NetConfig.ServerAddress, NetConfig.Port, RecHandler);
+            Ping();
         }
 
         public void RegisterCallBack(string msgid, Action<string, string> regCall)
@@ -65,17 +68,16 @@ namespace Client.Net
             }
         }
 
-        Dictionary<string, Action<string, string>> onMsgIdCallBack;
+        Dictionary<string, Action<string, string>> onMsgIdCallBack = new Dictionary<string, Action<string, string>>();
 		
         private void RecHandler(byte[] buf)
         {
             //json TODO
-            string msgid;
-            string pdata;
-            PacketBundle.ToObject(buf, out msgid, out pdata);
-            if (onMsgIdCallBack.TryGetValue(msgid,out var call))
+            PacketBundle.ToObject(buf, out var packet);
+            // LogManager.GetLogger("net").DebugFormat("RecHandler>>>>>> msgId="+ packet.id+ " msg="+ packet.msgJson);
+            if (onMsgIdCallBack.TryGetValue(packet.id,out var call))
             {
-                call(msgid, pdata);
+                call(packet.id, packet.msgJson);
             }
             else
             {
@@ -83,8 +85,16 @@ namespace Client.Net
             }
         }
 
-        public void Update()
+        public void Update(double deltaTime)
         {
+            timer += deltaTime;
+            pingTimer += deltaTime;
+            if (timer > 5)
+            {
+                timer = 0;
+                Ping();
+            }
+
             _socket.Update();
         }
 
@@ -94,11 +104,22 @@ namespace Client.Net
             _socket = null;
         }
 
+        private double timer = 0;
+        private double pingTimer = 0;
+        private int pingCounter = 0;
+        void Ping()
+        {
+            JObject jObject = new JObject();
+            jObject["counter"] = pingCounter++;
+            jObject["timer"] = pingTimer;
+            SendMsg("ping",jObject.ToString() );
+        }
+
         public void SendMsg(string msgId,string json)
         {
-            byte[] sendBuf;
-            PacketBundle.ToMsg(msgId, json, out sendBuf);
-            _socket.Send(sendBuf);
+            // LogManager.GetLogger("net").Debug("SendMsg>>>>>> msgId="+ msgId+ " msg="+ json);
+            PacketBundle.ToMsg(msgId, json, out var packet);
+            _socket.Send(packet.msgBytes);
         }
     }
 }

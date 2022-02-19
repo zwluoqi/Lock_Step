@@ -41,19 +41,24 @@ namespace Client.Logic
 	[System.Serializable]
 	public class FrameInputData
 	{
-		internal List<FrameOpeData> frameOpeDatas = new List<FrameOpeData>();
-		internal int frameCount;
+		public List<FrameOpeData> frameOpeDatas = new List<FrameOpeData>();
+		public int frameCount;
 
 		public void AddFrame(FrameOpeData frameMoveData)
 		{
 			frameOpeDatas.Add(frameMoveData);
+		}
+
+		public void Clear()
+		{
+			frameOpeDatas.Clear();
 		}
 	}
 
 	[System.Serializable]
 	public class FrameOpeData
 	{
-		internal int frameType;
+		public int frameType;
 	}
 
 	public enum FrameTYpe

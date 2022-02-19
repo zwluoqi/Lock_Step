@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using log4net;
 
 public class ASynKcpUdpClientSocket
 {
@@ -47,7 +48,7 @@ public class ASynKcpUdpClientSocket
         _socket.Connect(_remoteEP);
         _kcp = new KCP((uint)conv, (byte[] buf, int size) =>
         {
-            //Log4U.LogDebug("ASynKcpUdpClientSocket:createSocket Message send data=", Encoding.ASCII.GetString(buf, 0, size));
+            LogManager.GetLogger("kcp_client").Debug("ASynKcpUdpClientSocket:createSocket Message send size="+ size);
             _socket.Send(buf, size);
         });
         // fast mode.
@@ -59,24 +60,39 @@ public class ASynKcpUdpClientSocket
     private void ReceiveAsyn(IAsyncResult arg)
     {
         //byte[] rcvBuf = _receiveEP == null ? _socket.Receive(ref _receiveEP) : _socket.EndReceive(arg, ref _receiveEP);
-        byte[] rcvBuf = _socket.EndReceive(arg, ref _listenEP);
-        if (rcvBuf != null)
+        try
         {
-            //Log4U.LogDebug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive from ", _listenEP.ToString());
-            _kcp.Input(rcvBuf);
-            for (var size = _kcp.PeekSize(); size > 0; size = _kcp.PeekSize())
+            byte[] rcvBuf = _socket.EndReceive(arg, ref _listenEP);
+            if (rcvBuf != null)
             {
-                byte[] buf = new byte[size];
-                if (_kcp.Recv(buf) > 0)
+                LogManager.GetLogger("kcp_client")
+                    .Debug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive from " + _listenEP.ToString()+" length:"+rcvBuf.Length);
+                _kcp.Input(rcvBuf);
+                for (var size = _kcp.PeekSize(); size > 0; size = _kcp.PeekSize())
                 {
-                    //Log4U.LogDebug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive data=", Encoding.ASCII.GetString(buf));
-                    _recHandler(buf);
+                    byte[] buf = new byte[size];
+                    if (_kcp.Recv(buf) > 0)
+                    {
+                        // LogManager.GetLogger("kcp_client")
+                        //     .Debug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive data=" +
+                        //            Encoding.UTF8.GetString(buf));
+                        _recHandler(buf);
+                    }
                 }
             }
         }
-        if (_socket != null)
+        catch (Exception e)
         {
-            _socket.BeginReceive(ReceiveAsyn, this);
+            LogManager.GetLogger("kcp_client")
+                .Error(e.Message);
+        }
+        finally
+        {
+
+            if (_socket != null)
+            {
+                _socket.BeginReceive(ReceiveAsyn, this);
+            }
         }
     }
 

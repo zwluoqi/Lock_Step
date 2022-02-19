@@ -41,13 +41,13 @@ namespace Client.Logic
 {
 	public class FrameDownLoadManager
 	{
-		Queue<FrameInputData> curFrameDatas = new Queue<FrameInputData>();
+		List<FrameInputData> curFrameDatas = new List<FrameInputData>();
 
 		internal int GetLastFrameDataCount()
 		{
 			if (curFrameDatas.Count > 0)
 			{
-				return curFrameDatas.Peek().frameCount;
+				return curFrameDatas[curFrameDatas.Count-1].frameCount;
 			}
 			else
 			{
@@ -57,7 +57,14 @@ namespace Client.Logic
 
 		internal FrameInputData GetFrameDataList(int curFrameCount)
 		{
-			return curFrameDatas.Dequeue();
+			var frame = curFrameDatas[0];
+			curFrameDatas.RemoveAt(0);
+			return frame;
+		}
+
+		public void OnFrame(FrameInputData frameInputData)
+		{
+			curFrameDatas.Add(frameInputData);
 		}
 	}
 }

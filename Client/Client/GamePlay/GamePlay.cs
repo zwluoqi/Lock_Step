@@ -49,17 +49,23 @@ namespace Client
 
 		public GameLogic logic = new GameLogic();
 		public GameView view = new GameView();
-		public GamePlayData gamePlayData;
-		NetManager netManager;
+		public GamePlayData gamePlayData = new GamePlayData();
+		NetManager netManager = new NetManager();
 
 		public void InitNetWork()
 		{
 			netManager.Init(gamePlayData.playerId);
+			netManager.RegisterCallBack("frame",OnFrame);
+		}
+
+		private void OnFrame(string arg1, string arg2)
+		{
+			logic.OnFrame(arg2);
 		}
 
 		public void Tick(double deltaTime)
 		{
-			netManager.Update();
+			netManager.Update(deltaTime);
 			logic.Tick(deltaTime);
 			view.Tick(deltaTime,netManager);
 		}

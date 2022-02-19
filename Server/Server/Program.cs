@@ -35,6 +35,12 @@
 // */
 //
 using System;
+using System.IO;
+using System.Threading;
+using log4net;
+
+using log4net.Config;
+using Server.ServerRunning;
 
 namespace Server
 {
@@ -42,7 +48,16 @@ namespace Server
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			
+			Console.WriteLine("Hello Server!");
+
+			GamePlay gamePlay = new GamePlay();
+			gamePlay.InitNetWork();
+			while (true)
+			{
+				gamePlay.Tick(0.033);
+				Thread.Sleep(33);
+			}
 		}
 	}
 }

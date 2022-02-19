@@ -41,14 +41,14 @@ namespace Client.View
 {
 	public class CommondDataManager
 	{
-		public Queue<CommondData> commondDatas = new Queue<CommondData>();
+		public List<CommondData> commondDatas = new List<CommondData>();
 		public CommondDataManager()
 		{
 		}
 
 		internal List<CommondData> GetCommondList()
 		{
-			return null;
+			return commondDatas;
 		}
 	}
 }

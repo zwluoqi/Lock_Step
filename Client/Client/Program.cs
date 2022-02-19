@@ -43,7 +43,7 @@ namespace Client
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World Lock Frame!");
+			Console.WriteLine("Hello Client!");
 			GamePlay gamePlay = new GamePlay();
 			gamePlay.InitNetWork();
 			while (true)

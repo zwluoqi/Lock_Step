@@ -48,10 +48,15 @@ namespace Client.View
 		
 		public void PushFrameData(NetManager netManager)
 		{
+			if (sendCache.frameOpeDatas.Count == 0)
+			{
+				return;
+			}
 			sendCache.frameCount = 0;
 			JObject jObject = new JObject();
 			jObject["frame"] = Newtonsoft.Json.JsonConvert.SerializeObject(sendCache);
 			netManager.SendMsg("frame",jObject.ToString());
+			sendCache.Clear();
 		}
 
 		public void SendMove()
@@ -59,7 +64,6 @@ namespace Client.View
 			FrameMoveData frameMoveData = new FrameMoveData();
 			frameMoveData.frameType = 1;
 			frameMoveData.moveDir = 1;
-			
 			sendCache.AddFrame(frameMoveData);
 		}
 
@@ -67,9 +71,6 @@ namespace Client.View
 		{
 			FrameStopData frameStopData = new FrameStopData();
 			frameStopData.frameType = 2;
-			// JObject jObject = new JObject();
-			// jObject["frame"] = Newtonsoft.Json.JsonConvert.SerializeObject(frameStopData);
-			// netManager.SendMsg("frameinput",jObject.ToString());
 			sendCache.AddFrame(frameStopData);
 		}
 
@@ -78,9 +79,6 @@ namespace Client.View
 			FrameAttackData frameAttack = new FrameAttackData();
 			frameAttack.frameType = 3;
 			frameAttack.attackId = 1;
-			// JObject jObject = new JObject();
-			// jObject["frame"] = Newtonsoft.Json.JsonConvert.SerializeObject(frameAttack);
-			// netManager.SendMsg("frameinput",jObject.ToString());
 			sendCache.AddFrame(frameAttack);
 		}
 	}

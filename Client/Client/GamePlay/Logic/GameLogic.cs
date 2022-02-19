@@ -36,6 +36,8 @@
 //
 using System;
 using System.Collections.Generic;
+using log4net;
+using Newtonsoft.Json.Linq;
 
 namespace Client.Logic
 {
@@ -103,7 +105,7 @@ namespace Client.Logic
 		private void _InnerTick()
 		{
 			curFrameCount++;
-			Debug.Log("逻辑帧:" + curFrameCount);
+			LogManager.GetLogger("logic").Debug("逻辑帧:" + curFrameCount);
 			var frameInputData = frameDataManager.GetFrameDataList(curFrameCount);
 			foreach(var frameData in frameInputData.frameOpeDatas)
 			{
@@ -119,6 +121,14 @@ namespace Client.Logic
 		private FrameAPI GetFrameProcessAPI(int frameType)
 		{
 			throw new NotImplementedException();
+		}
+
+		public void OnFrame(string json)
+		{
+			JObject jObject = JObject.Parse(json);
+			var frame = (string)jObject["frame"];
+			var receiveFrame = Newtonsoft.Json.JsonConvert.DeserializeObject<FrameInputData>(frame);
+			frameDataManager.OnFrame(receiveFrame);
 		}
 	}
 }

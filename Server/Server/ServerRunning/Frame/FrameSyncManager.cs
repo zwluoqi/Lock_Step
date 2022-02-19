@@ -27,17 +27,38 @@
 //
 //                 我们的未来没有BUG
 // * ==============================================================================
-// * Filename:GamePlay.cs
+// * Filename:ViewNetManager.cs
 // * Created:2022/2/16
 // * Author:  zhouwei
 // * Purpose:
 // * ==============================================================================
 // */
 //
-namespace Client
+using System;
+
+using Newtonsoft.Json.Linq;
+using Server.Net;
+
+namespace Server.ServerRunning.Frame
 {
-	public class GamePlayData
+	public class FrameSyncManager
 	{
-		internal int playerId = 1;
+
+		public FrameInputData sendCache = new FrameInputData();
+
+		public void PushFrameData(int frameCount,ServerUDPMgr netManager)
+		{
+			sendCache.frameCount = frameCount;
+			JObject jObject = new JObject();
+			var str = Newtonsoft.Json.JsonConvert.SerializeObject(sendCache);
+			jObject["frame"] = str;
+			netManager.SendMsgToAll("frame", jObject.ToString());
+		}
+
+		public void ReceiveFrameData(string json)
+		{
+			var receiveFrame = Newtonsoft.Json.JsonConvert.DeserializeObject<FrameInputData>(json);
+			receiveFrame.AddFrames(receiveFrame);
+		}
 	}
 }

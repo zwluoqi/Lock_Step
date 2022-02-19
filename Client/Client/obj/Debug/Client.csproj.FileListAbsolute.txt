@@ -4,3 +4,10 @@
 /Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.csproj.CoreCompileInputs.cache
 /Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.exe
 /Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.pdb
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/log4net.dll
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/Newtonsoft.Json.dll
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/log4net.xml
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/Newtonsoft.Json.xml
+/Users/zhouwei/Unity/Lock_Step/Client/Client/obj/Debug/Client.csproj.CopyComplete
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/packages.config
+/Users/zhouwei/Unity/Lock_Step/Client/Client/bin/Debug/log4net.config

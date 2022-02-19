@@ -27,11 +27,17 @@
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GamePlay\Frame\FrameDownLoadManager.cs" />
@@ -40,6 +46,7 @@
     <Compile Include="GamePlay\GameNet\NetManager.cs" />
     <Compile Include="GamePlay\GameNet\PacketBundle.cs" />
     <Compile Include="GamePlay\GamePlay.cs" />
+    <Compile Include="GamePlay\GamePlayData.cs" />
     <Compile Include="GamePlay\Logic\FrameAPI.cs" />
     <Compile Include="GamePlay\Logic\GameLogic.cs" />
     <Compile Include="GamePlay\Logic\GameLogicActor.cs" />
@@ -48,20 +55,23 @@
     <Compile Include="GamePlay\View\Commond\CommondDataManager.cs" />
     <Compile Include="GamePlay\View\GameView.cs" />
     <Compile Include="GamePlay\View\GameViewActor.cs" />
+    <Compile Include="NetCore\Kcp\ASynKcpUdpClientSocket.cs" />
+    <Compile Include="NetCore\Kcp\ASynServerKcp.cs" />
+    <Compile Include="NetCore\Kcp\KCP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Debug.cs" />
-    <Compile Include="NetCore\KCP\ASynKcpUdpServerSocket.cs" />
-    <Compile Include="NetCore\KCP\ASynServerKcp.cs" />
-    <Compile Include="NetCore\KCP\ASynKcpUdpClientSocket.cs" />
-    <Compile Include="NetCore\KCP\KCP.cs" />
-    <Compile Include="GamePlayData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NetCore\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
