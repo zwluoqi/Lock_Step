@@ -46,7 +46,7 @@ namespace Client.View
 
 		public FrameInputData sendCache = new FrameInputData();
 		
-		public void PushFrameData(NetManager netManager)
+		public void PushFrameData()
 		{
 			if (sendCache.frameOpeDatas.Count == 0)
 			{
@@ -55,7 +55,7 @@ namespace Client.View
 			sendCache.frameCount = 0;
 			JObject jObject = new JObject();
 			jObject["frame"] = Newtonsoft.Json.JsonConvert.SerializeObject(sendCache);
-			netManager.SendMsg("frame",jObject.ToString());
+			NetManager.Instance.SendMsg("frame",jObject.ToString());
 			sendCache.Clear();
 		}
 

@@ -44,13 +44,14 @@ namespace Client.Logic
 	public class GameLogic
 	{
 
-		public int curFrameCount = 0;
-		public const int fps = 10;
-		public double curFrameTime;
-		public double timer;
+		int curFrameCount = 0;
+		const int fps = 10;
+		double curFrameTime;
+		double timer;
 
-		public FrameDownLoadManager frameDataManager = new FrameDownLoadManager();
-		public List<GameLogicActor> logicActorList = new List<GameLogicActor>();
+		FrameDownLoadManager frameDataManager = new FrameDownLoadManager();
+		List<GameLogicActor> logicActorList = new List<GameLogicActor>();
+		private bool isOver = false;
 
 		public double spaceTimer
 		{
@@ -66,16 +67,22 @@ namespace Client.Logic
 
 		internal void Tick(double deltaTime)
 		{
+			if (isOver)
+			{
+				return;
+			}
 			var lastFrameDataCount = frameDataManager.GetLastFrameDataCount();
 			if(lastFrameDataCount == 0)
 			{
 				return;
 			}
-			if(lastFrameDataCount < curFrameCount)
+			//帧数据与客户端逻辑帧必须是一致的
+			if(lastFrameDataCount != curFrameCount+1)
 			{
-				throw new Exception("帧混乱");
+				isOver = true;
+				LogManager.GetLogger("logic").Error("帧混乱");
+				// throw new Exception("帧混乱");
 			}
-
 
 			double realDeltaTime = deltaTime;
 			//客户端延迟4秒以上，倍率2
@@ -129,6 +136,16 @@ namespace Client.Logic
 			var frame = (string)jObject["frame"];
 			var receiveFrame = Newtonsoft.Json.JsonConvert.DeserializeObject<FrameInputData>(frame);
 			frameDataManager.OnFrame(receiveFrame);
+		}
+
+		public bool IsOver()
+		{
+			return isOver;
+		}
+
+		public void OnGameOver()
+		{
+			isOver = true;
 		}
 	}
 }

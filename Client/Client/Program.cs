@@ -36,6 +36,7 @@
 //
 using System;
 using System.Threading;
+using Client.Net;
 
 namespace Client
 {
@@ -44,11 +45,21 @@ namespace Client
 		public static void Main(string[] args)
 		{
 			Console.WriteLine("Hello Client!");
+			int playerId = (new Random(System.DateTime.Now.Millisecond)).Next();
+			NetManager.Instance.Init(playerId);
+
 			GamePlay gamePlay = new GamePlay();
-			gamePlay.InitNetWork();
+			gamePlay.Init();
 			while (true)
 			{
+				NetManager.Instance.Update(0.033);
 				gamePlay.Tick(0.033);
+				if (gamePlay.IsOver())
+				{
+					gamePlay.Release();
+					gamePlay = new GamePlay();
+					gamePlay.Init();
+				}
 				Thread.Sleep(33);
 			}
 		}

@@ -47,6 +47,8 @@ namespace Server.ServerRunning.Frame
 		public double curFrameTime;
 		public double timer;
 
+		private bool isOver = false;
+
 		public FrameSyncManager frameSyncManager = new FrameSyncManager();
 
 
@@ -58,13 +60,17 @@ namespace Server.ServerRunning.Frame
 			}
 		}
 
-		public void Tick(double deltaTime, ServerUDPMgr serverUDPMgr)
+		public void Tick(double deltaTime)
 		{
+			if (isOver)
+			{
+				return;
+			}
 			timer += deltaTime;
 			if (timer > curFrameTime + spaceTimer)
 			{
 				curFrameTime += spaceTimer;
-				_InnerTick(serverUDPMgr);
+				_InnerTick();
 			}
 		}
 
@@ -73,11 +79,23 @@ namespace Server.ServerRunning.Frame
 			frameSyncManager.ReceiveFrameData(arg2);
 		}
 
-		private void _InnerTick(ServerUDPMgr serverUDPMgr)
+		internal bool IsOver()
+		{
+			return isOver;
+		}
+
+		private void _InnerTick()
 		{
 			curFrameCount++;
-			//LogManager.GetLogger("logic").Debug("逻辑帧:" + curFrameCount);
-			frameSyncManager.PushFrameData(curFrameCount, serverUDPMgr);
+			LogManager.GetLogger("logic").Debug("逻辑帧:" + curFrameCount);
+			frameSyncManager.PushFrameData(curFrameCount);
+
+			if (curFrameCount > fps )
+			{
+				isOver = true;
+				frameSyncManager.PushGameOverData();
+			}
+
 		}
 	}
 }

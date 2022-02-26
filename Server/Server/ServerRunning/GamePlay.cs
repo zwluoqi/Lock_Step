@@ -42,17 +42,27 @@ namespace Server.ServerRunning
 {
 	public class GamePlay
 	{
-		public ServerUDPMgr serverUDPMgr = new ServerUDPMgr();
+
 		public FrameManager frameManager = new FrameManager();
 		public GamePlay()
 		{
 		}
 
-		internal void InitNetWork()
+		public void Init()
 		{
-			serverUDPMgr.Init();
-			serverUDPMgr.RegisterCallBack("ping", OnPing);
-			serverUDPMgr.RegisterCallBack("frame", OnFrame);
+			ServerUDPMgr.Instance.RegisterCallBack("ping", OnPing);
+			ServerUDPMgr.Instance.RegisterCallBack("frame", OnFrame);
+		}
+
+		public void Release()
+		{
+			ServerUDPMgr.Instance.UnRegisterCallBack("ping", OnPing);
+			ServerUDPMgr.Instance.UnRegisterCallBack("frame", OnFrame);
+		}
+
+		internal bool IsOver()
+		{
+			return frameManager.IsOver();
 		}
 
 		private void OnFrame(string arg1, string arg2)
@@ -67,8 +77,7 @@ namespace Server.ServerRunning
 
 		public void Tick(double deltaTime)
 		{
-			serverUDPMgr.Update();
-			frameManager.Tick(deltaTime, serverUDPMgr);
+			frameManager.Tick(deltaTime);
 		}
 	}
 }

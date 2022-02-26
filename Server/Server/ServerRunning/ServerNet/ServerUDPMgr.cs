@@ -10,6 +10,16 @@ namespace Server.Net
 {
     public class ServerUDPMgr
     {
+        private static ServerUDPMgr _instance = new ServerUDPMgr();
+
+        public static ServerUDPMgr Instance
+		{
+			get
+			{
+                return _instance;
+			}
+		}
+
         private ASynKcpUdpServerSocket _socket;
 
         public void Init()
@@ -29,10 +39,21 @@ namespace Server.Net
             }
         }
 
+        public void UnRegisterCallBack(string msgid, Action<string, string> regCall)
+        {
+            if (onMsgIdCallBack.TryGetValue(msgid, out var call))
+            {
+                call -= regCall;
+            }
+            else
+            {
+
+            }
+        }
+
         Dictionary<string, Action<string, string>> onMsgIdCallBack = new Dictionary<string, Action<string, string>>();
 
-
-        private void RecHandler(byte[] buf, ASynServerKcp serverKcp)
+		private void RecHandler(byte[] buf, ASynServerKcp serverKcp)
         {
 
             PacketBundle.ToObject(buf, out var packet);
@@ -44,7 +65,7 @@ namespace Server.Net
             }
             else
             {
-                throw new NotImplementedException();
+                LogManager.GetLogger("net").Debug(packet.id+" not callback");
             }
         }
 

@@ -50,12 +50,16 @@ namespace Client
 		public GameLogic logic = new GameLogic();
 		public GameView view = new GameView();
 		public GamePlayData gamePlayData = new GamePlayData();
-		NetManager netManager = new NetManager();
 
-		public void InitNetWork()
+		public void Init()
 		{
-			netManager.Init(gamePlayData.playerId);
-			netManager.RegisterCallBack("frame",OnFrame);
+			NetManager.Instance.RegisterCallBack("frame",OnFrame);
+			NetManager.Instance.RegisterCallBack("gameover",OnGameOver);
+		}
+
+		private void OnGameOver(string arg1, string arg2)
+		{
+			logic.OnGameOver();
 		}
 
 		private void OnFrame(string arg1, string arg2)
@@ -65,9 +69,19 @@ namespace Client
 
 		public void Tick(double deltaTime)
 		{
-			netManager.Update(deltaTime);
 			logic.Tick(deltaTime);
-			view.Tick(deltaTime,netManager);
+			view.Tick(deltaTime);
+		}
+
+		public bool IsOver()
+		{
+			return logic.IsOver();
+		}
+
+		public void Release()
+		{
+			NetManager.Instance.UnRegisterCallBack("frame",OnFrame);
+			NetManager.Instance.UnRegisterCallBack("gameover",OnGameOver);
 		}
 	}
 }

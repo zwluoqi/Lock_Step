@@ -57,6 +57,11 @@ namespace Server.ServerRunning.Frame
 				frameOpeDatas.Add(frame);
 			}
 		}
+
+		public void ClearFrames()
+		{
+			frameOpeDatas.Clear();
+		}
 	}
 
 	[System.Serializable]

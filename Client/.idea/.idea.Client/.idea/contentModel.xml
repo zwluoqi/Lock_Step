@@ -39,7 +39,6 @@
         <e p="NetCore" t="Include">
           <e p="KCP" t="Include">
             <e p="ASynKcpUdpClientSocket.cs" t="Include" />
-            <e p="ASynServerKcp.cs" t="Include" />
             <e p="KCP.cs" t="Include" />
           </e>
         </e>

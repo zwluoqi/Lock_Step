@@ -47,7 +47,7 @@ namespace Client.View
 
 		public List<GameViewActor> actors = new List<GameViewActor>();
 
-		internal void Tick(double deltaTime,NetManager netManager)
+		internal void Tick(double deltaTime)
 		{
 			var commondList = commondDataManager.GetCommondList();
 			foreach(var commond in commondList)
@@ -60,7 +60,7 @@ namespace Client.View
 				actor.Tick(deltaTime);
 			}
 			
-			frameUploadManager.PushFrameData(netManager);
+			frameUploadManager.PushFrameData();
 		}
 
 		private CommondAPI GetCommondAPI(int commondType)

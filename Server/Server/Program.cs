@@ -40,6 +40,7 @@ using System.Threading;
 using log4net;
 
 using log4net.Config;
+using Server.Net;
 using Server.ServerRunning;
 
 namespace Server
@@ -50,12 +51,20 @@ namespace Server
 		{
 			
 			Console.WriteLine("Hello Server!");
+			ServerUDPMgr.Instance.Init();
 
 			GamePlay gamePlay = new GamePlay();
-			gamePlay.InitNetWork();
+			gamePlay.Init();
 			while (true)
 			{
+				ServerUDPMgr.Instance.Update();
 				gamePlay.Tick(0.033);
+				if (gamePlay.IsOver())
+				{
+					gamePlay.Release();
+					gamePlay = new GamePlay();
+					gamePlay.Init();
+				}
 				Thread.Sleep(33);
 			}
 		}

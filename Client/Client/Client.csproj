@@ -56,7 +56,6 @@
     <Compile Include="GamePlay\View\GameView.cs" />
     <Compile Include="GamePlay\View\GameViewActor.cs" />
     <Compile Include="NetCore\Kcp\ASynKcpUdpClientSocket.cs" />
-    <Compile Include="NetCore\Kcp\ASynServerKcp.cs" />
     <Compile Include="NetCore\Kcp\KCP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

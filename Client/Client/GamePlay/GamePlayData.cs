@@ -41,11 +41,5 @@ namespace Client
 {
 	public class GamePlayData
 	{
-		internal int playerId = 1;
-
-		public GamePlayData()
-		{
-			playerId = (new Random()).Next();
-		}
 	}
 }
