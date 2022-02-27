@@ -54,6 +54,7 @@ public class ASynKcpUdpServerSocket
         {
             var aSynKcp = tmps[i];
             aSynKcp.Update(current);
+			//这里是简单掉线判断处理,合理情况应该用额外的tcp做在线或掉线处理
 			if (aSynKcp.IsTimeOut)
 			{
                 string epKey = aSynKcp.RemoteEP.Address + ":" + aSynKcp.RemoteEP.Port;
