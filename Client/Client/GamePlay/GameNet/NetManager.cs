@@ -61,10 +61,10 @@ namespace Client.Net
         {
             NetConfig.PlayerId = PlayerId;
             _socket = new ASynKcpUdpClientSocket(NetConfig.PlayerId, NetConfig.ServerAddress, NetConfig.Port, RecHandler);
-            Ping();
+            Connect();
         }
 
-        public void RegisterCallBack(string msgid, Action<string, string> regCall)
+        public void RegisterCallBack(string msgid, OnReceiveCall regCall)
         {
             if (onMsgIdCallBack.TryGetValue(msgid, out var call))
             {
@@ -76,11 +76,19 @@ namespace Client.Net
             }
         }
         
-        public void UnRegisterCallBack(string msgid, Action<string, string> regCall)
+        public void UnRegisterCallBack(string msgid, OnReceiveCall regCall)
         {
             if (onMsgIdCallBack.TryGetValue(msgid, out var call))
             {
                 call -= regCall;
+                if (call == null)
+                {
+                    onMsgIdCallBack.Remove(msgid);
+                }
+                else
+                {
+                    onMsgIdCallBack[msgid] = call;
+                }
             }
             else
             {
@@ -88,7 +96,8 @@ namespace Client.Net
             }
         }
 
-        Dictionary<string, Action<string, string>> onMsgIdCallBack = new Dictionary<string, Action<string, string>>();
+        public delegate void OnReceiveCall(string s1, string s2);
+        Dictionary<string, OnReceiveCall> onMsgIdCallBack = new Dictionary<string,OnReceiveCall>();
 
         private Queue<Packet> RecieveDatas = new Queue<Packet>();
         object _RecieveLock = new object();
@@ -97,26 +106,27 @@ namespace Client.Net
         {
             //json TODO
             PacketBundle.ToObject(buf, out var packet);
-            RecieveDatas.Enqueue(packet);
-            // LogManager.GetLogger("net").DebugFormat("RecHandler>>>>>> msgId="+ packet.id+ " msg="+ packet.msgJson);
-
+            InputReceiveDatas(packet);
         }
 
         public void Update(double deltaTime)
         {
-            timer += deltaTime;
-            pingTimer += deltaTime;
-            if (timer > 5)
-            {
-                timer = 0;
-                Ping();
-            }
 
             _socket.Update();
             ProcessReceiveDatas();
         }
 
         private Packet[] packets = new Packet[16];
+
+        private void InputReceiveDatas(Packet packet)
+        {
+            LogManager.GetLogger("net").Debug("RecHandler>>>>>> msgId="+ packet.id+ " msg="+ packet.msgJson);
+            lock (_RecieveLock)
+            {
+                RecieveDatas.Enqueue(packet);
+            }
+        }
+        
         private void ProcessReceiveDatas()
         {
             int counter = 0;
@@ -147,7 +157,7 @@ namespace Client.Net
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    LogManager.GetLogger("net").Error(packet.id+" not callback");
                 } 
             }
         }
@@ -168,6 +178,14 @@ namespace Client.Net
             jObject["timer"] = pingTimer;
             SendMsg("ping",jObject.ToString() );
         }
+        
+        
+        private void Connect()
+        {
+            JObject jObject = new JObject();
+            SendMsg("connect",jObject.ToString());
+        }
+
 
         public void SendMsg(string msgId,string json)
         {

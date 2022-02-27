@@ -47,6 +47,9 @@ namespace Client.View
 
 		public List<GameViewActor> actors = new List<GameViewActor>();
 
+		public double moveTimer = 0;
+		public double stopTimer = 0;
+		public double attackTimer = 0;
 		internal void Tick(double deltaTime)
 		{
 			var commondList = commondDataManager.GetCommondList();
@@ -59,9 +62,36 @@ namespace Client.View
 			{
 				actor.Tick(deltaTime);
 			}
+
+			//TEST INPUT
+			TEST_INPUT(deltaTime);
 			
 			frameUploadManager.PushFrameData();
+
 		}
+
+		private void TEST_INPUT(double deltaTime)
+		{
+			moveTimer += deltaTime;
+			stopTimer += deltaTime;
+			attackTimer += deltaTime;
+			if (moveTimer > 5)
+			{
+				frameUploadManager.SendMove();
+				moveTimer = 0;
+			}
+			
+			if (stopTimer > 7)
+			{
+				stopTimer = 0;
+				frameUploadManager.SendStop();
+			}
+
+			if (attackTimer > 10)
+			{
+				attackTimer = 0;
+				frameUploadManager.SendAttack();
+			}		}
 
 		private CommondAPI GetCommondAPI(int commondType)
 		{

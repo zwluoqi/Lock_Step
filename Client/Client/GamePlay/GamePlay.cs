@@ -53,15 +53,21 @@ namespace Client
 
 		public void Init()
 		{
+			NetManager.Instance.RegisterCallBack("gamestart",OnGameStart);
 			NetManager.Instance.RegisterCallBack("frame",OnFrame);
 			NetManager.Instance.RegisterCallBack("gameover",OnGameOver);
+		}
+
+		private void OnGameStart(string s1, string s2)
+		{
+			logic.OnGameStart(s2);
 		}
 
 		private void OnGameOver(string arg1, string arg2)
 		{
 			logic.OnGameOver();
 		}
-
+		
 		private void OnFrame(string arg1, string arg2)
 		{
 			logic.OnFrame(arg2);
@@ -82,6 +88,7 @@ namespace Client
 		{
 			NetManager.Instance.UnRegisterCallBack("frame",OnFrame);
 			NetManager.Instance.UnRegisterCallBack("gameover",OnGameOver);
+			NetManager.Instance.UnRegisterCallBack("gamestart",OnGameStart);
 		}
 	}
 }

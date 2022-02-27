@@ -27,7 +27,7 @@ namespace Server.Net
             _socket = new ASynKcpUdpServerSocket(NetConfig.Port, RecHandler);
         }
 
-        public void RegisterCallBack(string msgid, Action<string, string> regCall)
+        public void RegisterCallBack(string msgid, OnReceiveCall regCall)
         {
             if (onMsgIdCallBack.TryGetValue(msgid, out var call))
             {
@@ -39,40 +39,94 @@ namespace Server.Net
             }
         }
 
-        public void UnRegisterCallBack(string msgid, Action<string, string> regCall)
+        public void UnRegisterCallBack(string msgid, OnReceiveCall regCall)
         {
             if (onMsgIdCallBack.TryGetValue(msgid, out var call))
             {
                 call -= regCall;
+                if (call == null)
+                {
+                    onMsgIdCallBack.Remove(msgid);
+                }
+                else
+                {
+                    onMsgIdCallBack[msgid] = call;
+                }
             }
             else
             {
-
+                LogManager.GetLogger("net").Error(msgid + " not callback");
             }
         }
 
-        Dictionary<string, Action<string, string>> onMsgIdCallBack = new Dictionary<string, Action<string, string>>();
+        public delegate void OnReceiveCall(string s1, string s2);
+        Dictionary<string, OnReceiveCall> onMsgIdCallBack = new Dictionary<string, OnReceiveCall>();
 
-		private void RecHandler(byte[] buf, ASynServerKcp serverKcp)
+        private Queue<Packet> RecieveDatas = new Queue<Packet>();
+        object _RecieveLock = new object();
+
+        private void RecHandler(byte[] buf, ASynServerKcp serverKcp)
         {
 
             PacketBundle.ToObject(buf, out var packet);
-            //LogManager.GetLogger("net").DebugFormat($"SimulateServerUDP:RecHandler>>>>>> msgId= {packet.id} ,msg= {packet.msgJson}");
             serverKcp.PlayerId = packet.pid;
-            if (onMsgIdCallBack.TryGetValue(packet.id, out var call))
-            {
-                call(packet.id, packet.msgJson);
-            }
-            else
-            {
-                LogManager.GetLogger("net").Debug(packet.id+" not callback");
-            }
+
+            InputReceiveDatas(packet);
+
         }
 
         public void Update()
         {
             _socket.Update();
+            ProcessReceiveDatas();
         }
+
+        private Packet[] packets = new Packet[16];
+
+        private void InputReceiveDatas(Packet packet)
+        {
+			LogManager.GetLogger("net").Debug("RecHandler>>>>>> msgId=" + packet.id + " msg=" + packet.msgJson);
+			lock (_RecieveLock)
+            {
+                RecieveDatas.Enqueue(packet);
+            }
+        }
+
+        private void ProcessReceiveDatas()
+        {
+            int counter = 0;
+            Packet packet = null;
+            lock (_RecieveLock)
+            {
+                while (RecieveDatas.Count > 0 && counter < 16)
+                {
+                    packet = RecieveDatas.Dequeue();
+                    if (packet != null)
+                    {
+                        packets[counter++] = (packet);
+                    }
+                }
+            }
+
+            if (counter == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < counter; i++)
+            {
+                packet = packets[i];
+                if (onMsgIdCallBack.TryGetValue(packet.id, out var call))
+                {
+                    call(packet.id, packet.msgJson);
+                }
+                else
+                {
+                    LogManager.GetLogger("net").Error(packet.id + " not callback");
+                }
+            }
+        }
+
 
         public void Release()
         {

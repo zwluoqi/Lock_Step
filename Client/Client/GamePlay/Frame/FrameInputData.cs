@@ -38,6 +38,13 @@ using System.Collections.Generic;
 
 namespace Client.Logic
 {
+	
+	[System.Serializable]
+	public class FrameInputDatas
+	{
+		public List<FrameInputData> curFrameDatas = new List<FrameInputData>();
+	}
+	
 	[System.Serializable]
 	public class FrameInputData
 	{

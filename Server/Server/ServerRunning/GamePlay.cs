@@ -52,17 +52,26 @@ namespace Server.ServerRunning
 		{
 			ServerUDPMgr.Instance.RegisterCallBack("ping", OnPing);
 			ServerUDPMgr.Instance.RegisterCallBack("frame", OnFrame);
+			ServerUDPMgr.Instance.RegisterCallBack("connect", OnConnect);
 		}
+
+
 
 		public void Release()
 		{
 			ServerUDPMgr.Instance.UnRegisterCallBack("ping", OnPing);
 			ServerUDPMgr.Instance.UnRegisterCallBack("frame", OnFrame);
+			ServerUDPMgr.Instance.UnRegisterCallBack("connect", OnConnect);
 		}
 
 		internal bool IsOver()
 		{
 			return frameManager.IsOver();
+		}
+
+		private void OnConnect(string arg1, string arg2)
+		{
+			frameManager.OnConnect();
 		}
 
 		private void OnFrame(string arg1, string arg2)

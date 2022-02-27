@@ -35,6 +35,7 @@
 // */
 //
 using System;
+using log4net;
 
 namespace Client.Logic
 {
@@ -42,7 +43,7 @@ namespace Client.Logic
 	{
 		internal void Process(FrameOpeData frameData)
 		{
-			throw new NotImplementedException();
+			LogManager.GetLogger("FrameAPI").Debug("process frame data:" + frameData.ToString());
 		}
 	}
 }

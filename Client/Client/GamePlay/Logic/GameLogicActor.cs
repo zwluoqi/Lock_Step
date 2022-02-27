@@ -40,9 +40,14 @@ namespace Client.Logic
 {
 	public class GameLogicActor
 	{
+		public long guid;
+		public double x, y, z;
+		public double dirx, diry, ditz;
+
+		public double timer;
 		internal void Tick()
 		{
-			throw new NotImplementedException();
+
 		}
 	}
 }

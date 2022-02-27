@@ -90,12 +90,21 @@ namespace Server.ServerRunning.Frame
 			LogManager.GetLogger("logic").Debug("逻辑帧:" + curFrameCount);
 			frameSyncManager.PushFrameData(curFrameCount);
 
-			if (curFrameCount > fps )
+			if (curFrameCount > fps*60 )
 			{
 				isOver = true;
 				frameSyncManager.PushGameOverData();
 			}
 
+		}
+
+		internal void OnConnect()
+		{
+			if (isOver)
+			{
+				return;
+			}
+			frameSyncManager.PushGameStartData();
 		}
 	}
 }

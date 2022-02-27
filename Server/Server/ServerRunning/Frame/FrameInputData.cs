@@ -39,6 +39,13 @@ using System.Collections.Generic;
 
 namespace Server.ServerRunning.Frame
 {
+
+	[System.Serializable]
+	public class FrameInputDatas
+	{
+		public List<FrameInputData> curFrameDatas = new List<FrameInputData>();
+	}
+
 	[System.Serializable]
 	public class FrameInputData
 	{

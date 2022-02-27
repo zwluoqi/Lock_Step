@@ -48,7 +48,14 @@ public class ASynKcpUdpClientSocket
         _socket.Connect(_remoteEP);
         _kcp = new KCP((uint)conv, (byte[] buf, int size) =>
         {
-            LogManager.GetLogger("kcp_client").Debug("ASynKcpUdpClientSocket:createSocket Message send size="+ size);
+            if (size == 24)
+            {
+            }
+            else
+            {
+                LogManager.GetLogger("kcp_client").Debug("ASynKcpUdpClientSocket:send Message send size=" + size);
+            }
+
             _socket.Send(buf, size);
         });
         // fast mode.
@@ -65,17 +72,14 @@ public class ASynKcpUdpClientSocket
             byte[] rcvBuf = _socket.EndReceive(arg, ref _listenEP);
             if (rcvBuf != null)
             {
-                LogManager.GetLogger("kcp_client")
-                    .Debug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive from " + _listenEP.ToString()+" length:"+rcvBuf.Length);
+                // LogManager.GetLogger("kcp_client")
+                //     .Debug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive from " + _listenEP.ToString()+" length:"+rcvBuf.Length);
                 _kcp.Input(rcvBuf);
                 for (var size = _kcp.PeekSize(); size > 0; size = _kcp.PeekSize())
                 {
                     byte[] buf = new byte[size];
                     if (_kcp.Recv(buf) > 0)
                     {
-                        // LogManager.GetLogger("kcp_client")
-                        //     .Debug("ASynKcpUdpClientSocket:ReceiveAsyn Message receive data=" +
-                        //            Encoding.UTF8.GetString(buf));
                         _recHandler(buf);
                     }
                 }

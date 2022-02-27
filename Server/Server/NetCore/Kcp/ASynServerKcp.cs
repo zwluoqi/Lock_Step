@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using log4net;
 
 public class ASynServerKcp
 {
@@ -10,6 +11,7 @@ public class ASynServerKcp
     private IPEndPoint _remoteEP;
     private Action<byte[], ASynServerKcp> _recHandler;
     private int _playerId = -1;
+    private System.DateTime lastInputTimer;
 
     public ASynServerKcp(UInt32 conv_, UdpClient socket, IPEndPoint ep, Action<byte[], ASynServerKcp> recHandler)
     {
@@ -20,6 +22,7 @@ public class ASynServerKcp
         // fast mode.
         _kcp.NoDelay(1, 10, 2, 1);
         _kcp.WndSize(128, 128);
+        lastInputTimer = System.DateTime.Now;
     }
 
     public void Send(byte[] buff)
@@ -34,6 +37,7 @@ public class ASynServerKcp
 
     public void Input(byte[] rcvBuf)
     {
+        lastInputTimer = System.DateTime.Now;
         _kcp.Input(rcvBuf);
         for (var size = _kcp.PeekSize(); size > 0; size = _kcp.PeekSize())
         {
@@ -47,6 +51,13 @@ public class ASynServerKcp
     }
 
     public IPEndPoint RemoteEP { get { return _remoteEP; } }
+	public bool IsTimeOut
+	{
+		get
+		{
+            return (System.DateTime.Now - lastInputTimer).TotalSeconds > 5;
+		}
+	}
 
     public int PlayerId
     {
@@ -75,8 +86,8 @@ public class ASynServerKcp
     // 服务器发包到客户端的流程：kcp->udp->client
     private void KcpOutput(byte[] buf, int size)
     {
-        //Log4U.LogDebug("ASynServerKcp:KcpOutput Message send data=", Encoding.ASCII.GetString(buf, 0, size));
-        _socket.Send(buf, size, _remoteEP);
+        LogManager.GetLogger("kcp_server").Debug("ASynServerKcp:KcpOutput Message send size="+size);
+		_socket.Send(buf, size, _remoteEP);
     }
 
 }

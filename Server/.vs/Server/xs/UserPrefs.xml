@@ -1,15 +1,14 @@
 ﻿<Properties StartupConfiguration="{B76F4629-EF01-4D82-ACF3-E5840C5A3311}|Default">
   <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Server/ServerRunning/ServerNet/ServerUDPMgr.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Server/NetCore/Kcp/ASynKcpUdpServerSocket.cs">
     <Files>
-      <File FileName="Server/ServerRunning/ServerNet/ServerUDPMgr.cs" Line="13" Column="1" />
-      <File FileName="Server/ServerRunning/Frame/FrameSyncManager.cs" Line="47" Column="13" />
-      <File FileName="Server/ServerRunning/Frame/FrameManager.cs" Line="79" Column="15" />
-      <File FileName="Server/ServerRunning/GamePlay.cs" Line="65" Column="21" />
-      <File FileName="Server/ServerRunning/ServerNet/PacketBundle.cs" Line="1" Column="1" />
-      <File FileName="Server/NetCore/Kcp/ASynKcpUdpServerSocket.cs" Line="28" Column="52" />
-      <File FileName="Server/ServerRunning/Frame/FrameInputData.cs" Line="43" Column="15" />
-      <File FileName="Server/Program.cs" Line="54" Column="23" />
+      <File FileName="Server/NetCore/Kcp/ASynKcpUdpServerSocket.cs" Line="50" Column="1" />
+      <File FileName="Server/NetCore/Kcp/ASynServerKcp.cs" Line="16" Column="12" />
+      <File FileName="Server/ServerRunning/ServerNet/ServerUDPMgr.cs" Line="80" Column="1" />
+      <File FileName="Server/ServerRunning/Frame/FrameManager.cs" Line="1" Column="1" />
+      <File FileName="Server/ServerRunning/Frame/FrameSyncManager.cs" Line="60" Column="39" />
+      <File FileName="Server/ServerRunning/Frame/FrameInputData.cs" Line="64" Column="26" />
+      <File FileName="Server/NetCore/Kcp/KCP.cs" Line="8" Column="14" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,21 +17,18 @@
             <Node name="Server" expanded="True">
               <Node name="References" expanded="True" />
               <Node name="NetCore" expanded="True">
-                <Node name="Kcp" expanded="True" />
+                <Node name="Kcp" expanded="True">
+                  <Node name="ASynKcpUdpServerSocket.cs" selected="True" />
+                </Node>
               </Node>
               <Node name="Properties" expanded="True" />
               <Node name="ServerRunning" expanded="True">
                 <Node name="Frame" expanded="True" />
-                <Node name="ServerNet" expanded="True">
-                  <Node name="ServerUDPMgr.cs" selected="True" />
-                </Node>
+                <Node name="ServerNet" expanded="True" />
               </Node>
             </Node>
           </Node>
         </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

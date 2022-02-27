@@ -53,7 +53,7 @@ namespace Client.Logic
 		List<GameLogicActor> logicActorList = new List<GameLogicActor>();
 		private bool isOver = false;
 
-		public double spaceTimer
+		public static double spaceTimer
 		{
 			get
 			{
@@ -71,41 +71,51 @@ namespace Client.Logic
 			{
 				return;
 			}
-			var lastFrameDataCount = frameDataManager.GetLastFrameDataCount();
-			if(lastFrameDataCount == 0)
+			var lastFrameCounter = frameDataManager.GetLastFrameDataCount();
+			var firstFrameCounter = frameDataManager.GetFirstFrameDataCount();
+			if(lastFrameCounter == 0)
 			{
 				return;
 			}
 			//帧数据与客户端逻辑帧必须是一致的
-			if(lastFrameDataCount != curFrameCount+1)
+			if(firstFrameCounter != curFrameCount+1)
 			{
 				isOver = true;
 				LogManager.GetLogger("logic").Error("帧混乱");
-				// throw new Exception("帧混乱");
+				throw new Exception("帧混乱");
+				return;
 			}
 
 			double realDeltaTime = deltaTime;
-			//客户端延迟4秒以上，倍率2
-			if (lastFrameDataCount - curFrameCount > 4*fps)
+			//客户端延迟4秒以上，倍率8
+			if (lastFrameCounter - curFrameCount > 8*fps)
+			{
+				realDeltaTime = deltaTime * 8;
+			}
+			//客户端延迟2秒，倍率2
+			else if (lastFrameCounter - curFrameCount > 4*fps)
+			{
+				realDeltaTime = deltaTime * 4;
+			}
+			else if (lastFrameCounter - curFrameCount > 2*fps)
 			{
 				realDeltaTime = deltaTime * 2;
 			}
-			//客户端延迟2秒，倍率1.5
-			else if (lastFrameDataCount - curFrameCount > 2*fps)
+			else if(lastFrameCounter - curFrameCount < fps/2)
 			{
-				realDeltaTime = deltaTime * 1.5;
+				realDeltaTime = deltaTime;
 			}
 			else
 			{
-				//
+				realDeltaTime = deltaTime * 1.5;
 			}
 
 			timer += realDeltaTime;
-			if (timer > curFrameTime + spaceTimer)
+			while (timer > curFrameTime + spaceTimer && lastFrameCounter!=0)
 			{
 				curFrameTime += spaceTimer;
-				timer = curFrameTime;
 				_InnerTick();
+				lastFrameCounter = frameDataManager.GetLastFrameDataCount();
 			}
 		}
 
@@ -127,9 +137,18 @@ namespace Client.Logic
 
 		private FrameAPI GetFrameProcessAPI(int frameType)
 		{
-			throw new NotImplementedException();
+			//TODO
+			return new FrameAPI();
 		}
 
+		public void OnGameStart(string json)
+		{
+			JObject jObject = JObject.Parse(json);
+			var frames = (string)jObject["frames"];
+			var receiveFrames = Newtonsoft.Json.JsonConvert.DeserializeObject<FrameInputDatas>(frames);
+			frameDataManager.OnFrames(receiveFrames);
+		}
+		
 		public void OnFrame(string json)
 		{
 			JObject jObject = JObject.Parse(json);
@@ -147,5 +166,7 @@ namespace Client.Logic
 		{
 			isOver = true;
 		}
+
+		
 	}
 }

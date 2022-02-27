@@ -42,7 +42,7 @@ namespace Client.View
 	{
 		internal void Tick(double deltaTime)
 		{
-			throw new NotImplementedException();
+			
 		}
 	}
 }

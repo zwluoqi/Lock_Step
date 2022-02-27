@@ -43,6 +43,19 @@ namespace Client.Logic
 	{
 		List<FrameInputData> curFrameDatas = new List<FrameInputData>();
 
+		
+		internal int GetFirstFrameDataCount()
+		{
+			if (curFrameDatas.Count > 0)
+			{
+				return curFrameDatas[0].frameCount;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		
 		internal int GetLastFrameDataCount()
 		{
 			if (curFrameDatas.Count > 0)
@@ -65,6 +78,11 @@ namespace Client.Logic
 		public void OnFrame(FrameInputData frameInputData)
 		{
 			curFrameDatas.Add(frameInputData);
+		}
+
+		public void OnFrames(FrameInputDatas receiveFrames)
+		{
+			curFrameDatas.AddRange(receiveFrames.curFrameDatas);
 		}
 	}
 }
